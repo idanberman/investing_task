@@ -5,7 +5,9 @@ import * as helmet from "helmet";
 import * as morgan from "morgan";
 import { ConnectionOptions, createConnection, DatabaseType } from "typeorm";
 import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
-import * as errorHandler from "./server/errorHandler";
+import { App } from "../App";
+import * as errorHandler from "../server/errorHandler";
+import { UserInstrumentController } from "./controllers/UserInstrumentController";
 
 export class ExpressServer {
   app: App;
@@ -43,14 +45,24 @@ export class ExpressServer {
   }
 
   private setRoutes(): void {
-    this.express.use("/v1", Routes);
+    this.express.use("/api", this.getApiRoutes());
+  }
+
+  private getApiRoutes(): express.Router {
+    const router: express.Router = express.Router();
+
+    router.get("/user-instrument", UserInstrumentController.list);
+    router.delete(
+      "/user-instrument/:instrumentId",
+      UserInstrumentController.delete
+    );
+    router.post("/user-instrument", UserInstrumentController.add);
+
+    return router;
   }
 
   private catchErrors(): void {
-    this.express.use(errorHandler.notFound);
+    // this.express.use(errorHandler.notFound);
     this.express.use(errorHandler.internalServerError);
   }
 }
-import { App } from "../App";
-
-export default Routes;

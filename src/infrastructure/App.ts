@@ -3,12 +3,12 @@ import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOpti
 import CONFIG from "../config/config";
 import { TypeormUserInstrumentRepository } from "./repositories/TypeormUserInstrumentRepository";
 import { ExpressServer } from "./server/ExpressServer";
+import { TypeormUserInstrumentEntity } from "./repositories/entities/TypeormUserInstrumentEntity";
 
 export class App {
   public server: ExpressServer;
   public config: { db: MysqlConnectionOptions; port: string };
   private db;
-  public repositories: any;
 
   constructor() {
     this.config = {
@@ -16,18 +16,15 @@ export class App {
       db: {
         ...CONFIG.db,
         type: (CONFIG.db.type as any) as "mariadb",
-        entities: [],
+        entities: [TypeormUserInstrumentEntity],
       },
     };
-
-    this.repositories.userInstrumentRepository = () =>
-      new TypeormUserInstrumentRepository();
   }
 
   public async run() {
     this.db = await createConnection(this.config.db);
     this.server = new ExpressServer(this);
 
-    await this.run();
+    await this.server.start();
   }
 }

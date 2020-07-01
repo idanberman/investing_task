@@ -12,7 +12,10 @@ export class DeleteUserInstruments implements UseCase {
     input: { [key: string]: string };
     params: { [key: string]: string };
   }): Promise<void> {
-    const instrumentToDeleteId = Number.parseInt(context.input.id, 10);
+    const instrumentToDeleteId = Number.parseInt(
+      context.input.instrumentId,
+      10
+    );
 
     if (Number.isNaN(instrumentToDeleteId)) {
       throw new Error("Invalid id");

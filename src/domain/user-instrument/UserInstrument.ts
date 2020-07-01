@@ -1,3 +1,5 @@
+import { UserInstrumentDto } from "./UserInstrumentDto";
+
 export interface UserInstrumentProps {
   instrumentId: number;
   name: string;
@@ -20,6 +22,22 @@ export class UserInstrument {
 
   get instrumentType() {
     return this._instrumentType;
+  }
+
+  set instrumentId(value) {
+    this._instrumentId = value;
+  }
+
+  set name(value) {
+    this._name = value;
+  }
+
+  set symbol(value) {
+    this._symbol = value;
+  }
+
+  set instrumentType(value) {
+    this._instrumentType = value;
   }
 
   public static create(userInstrumentProps: any) {
@@ -62,8 +80,17 @@ export class UserInstrument {
     return new UserInstrument(userInstrumentProps);
   }
 
+  public toDto(): UserInstrumentDto {
+    return {
+      instrumentId: this._instrumentId,
+      name: this._name,
+      symbol: this._symbol,
+      instrumentType: this.instrumentType,
+    };
+  }
+
   public static createFromSource(rawData: object): UserInstrument {
-    const userInstrument: UserInstrument = new UserInstrument(rawData);
+    const userInstrument: UserInstrument = new UserInstrument();
     Object.assign(userInstrument, rawData);
     return userInstrument;
   }
@@ -73,15 +100,13 @@ export class UserInstrument {
   private _symbol: string;
   private _instrumentType: string;
 
-  private constructor({
-    instrumentId,
-    name,
-    symbol,
-    instrumentType,
-  }: UserInstrumentProps) {
-    this._instrumentId = instrumentId;
-    this._name = name;
-    this._symbol = symbol;
-    this._instrumentType = instrumentType;
+  private constructor(props?: UserInstrumentProps) {
+    if (props) {
+      const { instrumentId, name, symbol, instrumentType } = props;
+      this._instrumentId = instrumentId;
+      this._name = name;
+      this._symbol = symbol;
+      this._instrumentType = instrumentType;
+    }
   }
 }

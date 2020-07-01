@@ -1,8 +1,8 @@
-import { UseCase } from "../UseCase";
-import { UserInstrumentRepository } from "../../domain/user-instrument/UserInstrumentRepository";
 import { UserInstrument } from "../../domain/user-instrument/UserInstrument";
+import { UserInstrumentRepository } from "../../domain/user-instrument/UserInstrumentRepository";
+import { UseCase } from "../UseCase";
 
-export class AddUserInstruments implements UseCase {
+export class AddUserInstrument implements UseCase {
   private userInstrumentRepository: UserInstrumentRepository;
 
   constructor(userInstrumentRepository: UserInstrumentRepository) {

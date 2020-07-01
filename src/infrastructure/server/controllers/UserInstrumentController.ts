@@ -1,7 +1,8 @@
 import * as express from "express";
-import { AddUserInstruments } from "../../../app/user-instrument/AddUserInstrument";
+import { AddUserInstrument } from "../../../app/user-instrument/AddUserInstrument";
 import { TypeormUserInstrumentRepository } from "../../repositories/TypeormUserInstrumentRepository";
 import { DeleteUserInstruments } from "../../../app/user-instrument/DeleteUserInstruemnt";
+import { ListUserInstrument } from "../../../app/user-instrument/ListUserInstrument";
 
 export class UserInstrumentController {
   public static async add(
@@ -11,7 +12,7 @@ export class UserInstrumentController {
   ): Promise<void> {
     const repo: TypeormUserInstrumentRepository = new TypeormUserInstrumentRepository();
 
-    const useCase = new AddUserInstruments(repo);
+    const useCase = new AddUserInstrument(repo);
     try {
       const result = await useCase.run({ input: req.body, params: req.params });
       res.json(result);
@@ -43,9 +44,9 @@ export class UserInstrumentController {
   ): Promise<void> {
     const repo: TypeormUserInstrumentRepository = new TypeormUserInstrumentRepository();
 
-    const useCase = new DeleteUserInstruments(repo);
+    const useCase = new ListUserInstrument(repo);
     try {
-      const result = await useCase.run({ input: req.body, params: req.params });
+      const result = await useCase.run();
       res.json(result);
     } catch (error) {
       next(error);
