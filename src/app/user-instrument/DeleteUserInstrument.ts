@@ -1,7 +1,9 @@
 import { UseCase } from "../UseCase";
 import { UserInstrumentRepository } from "../../domain/user-instrument/UserInstrumentRepository";
+import { NotFoundError } from "../../domain/errors/NotFoundError";
+import { InvalidInputError } from "../../domain/errors/InvalidInputError";
 
-export class DeleteUserInstruments implements UseCase {
+export class DeleteUserInstrument implements UseCase {
   private userInstrumentRepository: UserInstrumentRepository;
 
   constructor(userInstrumentRepository: UserInstrumentRepository) {
@@ -13,12 +15,12 @@ export class DeleteUserInstruments implements UseCase {
     params: { [key: string]: string };
   }): Promise<void> {
     const instrumentToDeleteId = Number.parseInt(
-      context.input.instrumentId,
+      context.params.instrumentId,
       10
     );
 
     if (Number.isNaN(instrumentToDeleteId)) {
-      throw new Error("Invalid id");
+      throw new InvalidInputError(["Invalid id"]);
     }
 
     const instrumentToDelete = await this.userInstrumentRepository.getUserInstrumentById(
@@ -26,10 +28,10 @@ export class DeleteUserInstruments implements UseCase {
     );
 
     if (!instrumentToDelete) {
-      throw new Error("NotFound");
+      throw new NotFoundError();
     }
 
-    return this.userInstrumentRepository.deleteUserInstrument(
+    await this.userInstrumentRepository.deleteUserInstrument(
       instrumentToDelete
     );
   }

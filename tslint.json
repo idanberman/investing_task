@@ -4,6 +4,7 @@
     "no-implicit-dependencies": [true, "dev"],
     "no-console": [true, "dev"],
     "object-literal-sort-keys": [false, "dev"],
-    "interface-name": [false]
+    "interface-name": [false],
+    "adjacent-overload-signatures": [false]
   }
 }

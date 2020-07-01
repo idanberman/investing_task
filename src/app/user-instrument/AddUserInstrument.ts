@@ -13,6 +13,7 @@ export class AddUserInstrument implements UseCase {
     input: { [key: string]: string };
     params: { [key: string]: string };
   }): Promise<void> {
+    // TODO check for duplicates
     await this.userInstrumentRepository.addUserInstrument(
       UserInstrument.create(context.input)
     );

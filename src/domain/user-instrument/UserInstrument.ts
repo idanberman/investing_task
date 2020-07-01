@@ -1,4 +1,5 @@
 import { UserInstrumentDto } from "./UserInstrumentDto";
+import { InvalidInputError } from "../errors/InvalidInputError";
 
 export interface UserInstrumentProps {
   instrumentId: number;
@@ -41,40 +42,43 @@ export class UserInstrument {
   }
 
   public static create(userInstrumentProps: any) {
-    const cleanProps: UserInstrumentProps = {
-      instrumentId: undefined,
-      name: String(userInstrumentProps.name),
-      symbol: String(userInstrumentProps.symbol),
-      instrumentType: String(userInstrumentProps.instrumentType),
-    };
-
-    const { name, symbol, instrumentType } = cleanProps;
+    if (!userInstrumentProps) {
+      throw new Error("name, symbol and instrumentType are required");
+    }
+    const { instrumentId, name, symbol, instrumentType } = userInstrumentProps;
 
     const errorList = [];
 
-    if (name.length === 0 || name.length > 50) {
+    if (instrumentId) {
+      errorList.push(
+        "instrumentId should not attached when creating user instrument"
+      );
+    }
+
+    if (!name || name.length === 0 || name.length > 50) {
       errorList.push(
         "'name' is required and must not contain more than 50 characters"
       );
     }
 
-    if (symbol.length === 0 || symbol.length > 20) {
+    if (!symbol || symbol.length === 0 || symbol.length > 20) {
       errorList.push(
         "'symbol' is required and must not contain more than 20 characters"
       );
     }
 
-    if (instrumentType.length === 0 || instrumentType.length > 10) {
+    if (
+      !instrumentType ||
+      instrumentType.length === 0 ||
+      instrumentType.length > 10
+    ) {
       errorList.push(
         "'instrumentType' is required and must not contain more than 10 characters"
       );
     }
 
     if (errorList.length > 0) {
-      throw new Error(
-        "Invalid input, please correct the following errors " +
-          errorList.join(", ")
-      );
+      throw new InvalidInputError(errorList);
     }
 
     return new UserInstrument(userInstrumentProps);

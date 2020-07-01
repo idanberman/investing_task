@@ -21,8 +21,12 @@ export class TypeormUserInstrumentRepository
   public async addUserInstrument(
     userInstrument: UserInstrument
   ): Promise<UserInstrument> {
-    const created = await this.repo.create({ ...userInstrument });
-    return UserInstrument.createFromSource(created);
+    const created = await this.repo.insert(userInstrument.toDto());
+
+    return UserInstrument.createFromSource({
+      ...userInstrument,
+      ...created.generatedMaps[0],
+    });
   }
   public async deleteUserInstrument(
     userInstrument: UserInstrument

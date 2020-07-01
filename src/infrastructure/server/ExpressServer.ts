@@ -63,6 +63,6 @@ export class ExpressServer {
 
   private catchErrors(): void {
     // this.express.use(errorHandler.notFound);
-    this.express.use(errorHandler.internalServerError);
+    this.express.use(errorHandler.errorHandlerMiddleware);
   }
 }
