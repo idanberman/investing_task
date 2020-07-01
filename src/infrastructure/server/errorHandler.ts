@@ -1,16 +1,4 @@
-// // handle not found errors
-// export const notFound = (req, res, next) => {
-//   res.status(httpStatus.NOT_FOUND);
-//   res.json({
-//     success: false,
-//     message: 'Requested Resource Not Found'
-//   });
-//   res.end();
-// };
-
 import { ErrorType } from "../../domain/errors/ErrorType";
-
-// handle internal server errors
 
 const ErrorToStatusCode: Map<ErrorType, number> = new Map();
 ErrorToStatusCode.set(ErrorType.InternalError, 500);
